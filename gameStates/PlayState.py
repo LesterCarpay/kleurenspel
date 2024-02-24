@@ -1,5 +1,3 @@
-from typing import Optional
-
 import pygame
 
 from GameSettings import GameSettings
@@ -13,16 +11,14 @@ class PlayState(AbstractGameState):
         super().__init__(game_settings)
         self.template_image = template_image
 
-    def activate(self) -> Optional['AbstractGameState']:
+    def activate(self):
         """
         Activates the game state, returns the next game state to be activated.
         """
-        pygame.init()
         image = self.template_image
         win = pygame.display.set_mode(image.get_size())
 
         # set the pygame window name
-        pygame.display.set_caption("Kleurenspel")
         clock = pygame.time.Clock()
         circle_positions = []
         circle_colors = []
