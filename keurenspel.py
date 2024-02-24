@@ -23,7 +23,6 @@ win = pygame.display.set_mode(image.get_size())
 
 # set the pygame window name
 pygame.display.set_caption("Kleurenspel")
-win.blit(image.get_image(), (0, 0))
 
 done = False
 clock = pygame.time.Clock()

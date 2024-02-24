@@ -6,12 +6,13 @@ import pygame
 
 class TemplateImage:
 
-    width = 500
-    max_height = 500
+    width = 800
+    max_height = 600
     image_folder_name = "images"
 
     def __init__(self, file_path: str):
         self.image = TemplateImage._load_image(file_path)
+        self.scale_image()
 
     def get_image(self):
         return self.image
@@ -23,6 +24,16 @@ class TemplateImage:
     def _load_image(file_path: str):
         return pygame.image.load(os.path.join(TemplateImage.image_folder_name, file_path))
 
+    def scale_image(self):
+        current_width, current_height = self.image.get_size()
+        factor = TemplateImage.width/current_width
+        new_width, new_height = current_width*factor, current_height*factor
+        if new_height > TemplateImage.max_height:
+            factor = TemplateImage.max_height/current_height
+            new_width, new_height = current_width * factor, current_height * factor
+        self.image = pygame.transform.scale(self.image, size=(new_width, new_height))
+
+
     @classmethod
     def get_random_image(cls):
         return cls("statue_of_liberty.jpg")
@@ -32,7 +43,7 @@ class TemplateImage:
         average_rgba = reduce(lambda x, y: x.lerp(y, 0.5), colors)
         return average_rgba
 
-    def get_circle_color(self, coordinate, radius, average=True):
+    def get_circle_color(self, coordinate, radius, average=False):
         if average:
             perimeter_coordinates = [(coordinate[0] + radius, coordinate[1]),
                                      (coordinate[0] - radius, coordinate[1]),
