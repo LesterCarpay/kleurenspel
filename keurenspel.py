@@ -6,8 +6,17 @@ from templateimage import TemplateImage
 frame_rate = 60
 
 
-def get_radius(i, frame_rate=frame_rate):
-    return int(1000/(i//frame_rate + 20))
+def get_radius_function(starting_radius=150, curve_factor=5, frame_rate=frame_rate):
+    """
+    Generates a function to use for the radius calculation, based on entered parameters.
+    :param starting_radius: the radius the circle should have at the start
+    :param curve_factor: determines how fast the radius shrinks, lower curve_factor -> faster shrinking, should be > 0.
+    :param frame_rate: the frame rate of the game
+    :return: a function that accepts only i, the index of the circle whose radius needs to be calculated
+    """
+    if curve_factor <= 0:
+        raise ValueError("curve_factor should be > 0")
+    return lambda i: int(starting_radius*frame_rate*curve_factor/(i+frame_rate*curve_factor))
 
 
 def play_game():
@@ -24,6 +33,7 @@ def play_game():
     circle_colors = []
     mouse_pressed = False
     mouse_position = (0, 0)
+    get_radius = get_radius_function()
 
     while not done:
         win.fill((250, 250, 250))
