@@ -1,5 +1,5 @@
 from GameSettings import GameSettings
-from gameStates.startMenu import StartMenuState
+from gameStates.StartMenuState import StartMenuState
 
 
 def main():

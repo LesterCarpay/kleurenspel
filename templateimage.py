@@ -36,7 +36,7 @@ class TemplateImage:
 
     @classmethod
     def get_random_image(cls):
-        return cls("statue_of_liberty.jpg")
+        return cls("giraffe.jpg")
 
     @staticmethod
     def get_average_color(colors):
