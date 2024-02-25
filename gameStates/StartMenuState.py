@@ -38,7 +38,6 @@ class StartMenuState(AbstractGameState):
 
         self.start_menu.render(self.screen, pygame.mouse.get_pos())
         pygame.display.update()
-        return True
 
     def start_game(self):
         image = TemplateImage.get_random_image()
