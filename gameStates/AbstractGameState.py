@@ -9,6 +9,7 @@ from gameStates.MenuButton import MenuButton
 class AbstractGameState(ABC):
 
     def __init__(self, game_settings: GameSettings):
+        self.screen = None
         self.clock = pygame.time.Clock()
         self.game_settings = game_settings
         self.buttons: list[MenuButton] = []
@@ -30,16 +31,21 @@ class AbstractGameState(ABC):
                 if event.type == pygame.QUIT or event.type == pygame.K_ESCAPE:
                     pygame.quit()
                     return
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    for button in self.buttons:
+                        if button.mouse_is_on_button(pygame.mouse.get_pos()):
+                            button.click()
+                            return
 
-            try:
-                self.looping_function(events)
-            except QuitGameException:
-                pygame.quit()
-                return
+            self.looping_function(events)
 
+            self.render_buttons()
             pygame.display.flip()
             self.clock.tick(self.game_settings.frame_rate)
 
-
-class QuitGameException(Exception):
-    pass
+    def render_buttons(self):
+        for button in self.buttons:
+            selected = button.mouse_is_on_button(pygame.mouse.get_pos())
+            color = button.get_button_color(selected=selected)
+            pygame.draw.rect(self.screen, color, button.get_rectangle())
+            self.screen.blit(button.get_rendered_text(), button.get_text_position())
