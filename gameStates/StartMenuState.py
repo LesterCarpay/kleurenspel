@@ -2,9 +2,8 @@ import pygame
 
 from GameSettings import GameSettings
 from gameStates.AbstractGameState import AbstractGameState
+from gameStates.CategorySelectionState import CategorySelectionState
 from gameStates.MenuButton import MenuButton
-from gameStates.PlayState import PlayState
-from templateimage import TemplateImage
 
 
 class StartMenuState(AbstractGameState):
@@ -16,10 +15,11 @@ class StartMenuState(AbstractGameState):
                                                   size=tuple(
                                                       0.5 * dim for dim in self.background_image.get_size()))
         screen = pygame.display.set_mode(self.background_image.get_size())
+        select_category_function = CategorySelectionState(game_settings=self.game_settings).activate
         play_button = MenuButton(x=screen.get_width() / 2 - 0.5 * MenuButton.button_width,
                                  y=screen.get_height() * (1 / 3) - 0.5 * MenuButton.button_height,
                                  text="play",
-                                 click_function=lambda: StartMenuState.start_game(self))
+                                 click_function=select_category_function)
         quit_button = MenuButton(x=screen.get_width() / 2 - 0.5 * MenuButton.button_width,
                                  y=screen.get_height() * (2 / 3) - 0.5 * MenuButton.button_height,
                                  text="quit",
@@ -32,6 +32,3 @@ class StartMenuState(AbstractGameState):
         self.screen.blit(self.background_image, (0, 0))
         pygame.display.update()
 
-    def start_game(self):
-        image = TemplateImage.get_random_image()
-        PlayState(game_settings=self.game_settings, template_image=image).activate()

@@ -4,7 +4,7 @@ import pygame
 
 class MenuButton:
     # formatting constants
-    button_width = 140
+    button_width = 180
     button_height = 40
     font_name = "Comicsans"
     font_size = 35
@@ -15,6 +15,7 @@ class MenuButton:
     def __init__(self, x, y, text: str, click_function: Callable[[], None]):
         self.rectangle = pygame.Rect(x, y, MenuButton.button_width, MenuButton.button_height)
         font = pygame.font.SysFont(MenuButton.font_name, MenuButton.font_size)
+        self.text = text
         self.rendered_text = font.render(text, True, MenuButton.text_color)
         self.click_function = click_function
 

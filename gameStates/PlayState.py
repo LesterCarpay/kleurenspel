@@ -2,7 +2,7 @@ import pygame
 
 from GameSettings import GameSettings
 from gameStates.AbstractGameState import AbstractGameState
-from templateimage import TemplateImage
+from TemplateImage import TemplateImage
 
 
 class PlayState(AbstractGameState):

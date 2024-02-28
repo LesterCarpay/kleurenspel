@@ -1,11 +1,18 @@
 import os
+import random
+from enum import Enum, auto
 from functools import reduce
 
 import pygame
 
 
-class TemplateImage:
+class ImageCategory(Enum):
+    animals = auto()
+    landmarks = auto()
+    art = auto()
 
+
+class TemplateImage:
     width = 800
     max_height = 600
     image_folder_name = "images"
@@ -22,21 +29,24 @@ class TemplateImage:
 
     @staticmethod
     def _load_image(file_path: str):
-        return pygame.image.load(os.path.join(TemplateImage.image_folder_name, file_path))
+        return pygame.image.load(file_path)
 
     def scale_image(self):
         current_width, current_height = self.image.get_size()
-        factor = TemplateImage.width/current_width
-        new_width, new_height = current_width*factor, current_height*factor
+        factor = TemplateImage.width / current_width
+        new_width, new_height = current_width * factor, current_height * factor
         if new_height > TemplateImage.max_height:
-            factor = TemplateImage.max_height/current_height
+            factor = TemplateImage.max_height / current_height
             new_width, new_height = current_width * factor, current_height * factor
         self.image = pygame.transform.scale(self.image, size=(new_width, new_height))
 
-
     @classmethod
-    def get_random_image(cls):
-        return cls("giraffe.jpg")
+    def get_random_image(cls, category: ImageCategory):
+        category_folder = os.path.join(cls.image_folder_name, category.name)
+        images_files = os.listdir(category_folder)
+        images_files = [image_file for image_file in images_files if image_file[-4:] == ".jpg"]
+        random_file = random.choice(images_files)
+        return cls(os.path.join(category_folder, random_file))
 
     @staticmethod
     def get_average_color(colors):
@@ -60,3 +70,4 @@ class TemplateImage:
             average_color = self.image.get_at(coordinate).lerp(average_color_perimeter, 0.5)
             return average_color
         return self.image.get_at(coordinate)
+
