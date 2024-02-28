@@ -53,11 +53,25 @@ class PlayState(AbstractGameState):
                 if event.key == pygame.K_BACKSPACE:
                     self.user_input = self.user_input[:-1]
                 else:
-                    self.user_input += event.unicode
+                    new_character = event.unicode
+                    if len(self.user_input) < 20 and (new_character.isalnum() or new_character == " "):
+                        self.user_input += event.unicode
 
     def render_answer_field(self):
         input_font = pygame.font.SysFont("Comicsans", 32)
         text_color = (0, 0, 0, 1)
-        rendered_text = input_font.render(self.user_input, True, text_color)
+        placeholder_color = (105, 105, 105)
+        placeholder_text = "Type your answer"
+        if self.user_input == "":
+            rendered_text = input_font.render(placeholder_text, True, placeholder_color)
+        else:
+            rendered_text = input_font.render(self.user_input, True, text_color)
         text_location = (self.screen.get_width() / 10, self.screen.get_height() * 9/10 - rendered_text.get_height())
+
+        margin_size = 3
+        background_rectangle = pygame.Rect(text_location[0] - margin_size,
+                                           text_location[1],
+                                           rendered_text.get_width() + 2*margin_size,
+                                           rendered_text.get_height())
+        pygame.draw.rect(self.screen, (250, 250, 250), background_rectangle)
         self.screen.blit(rendered_text, text_location)
